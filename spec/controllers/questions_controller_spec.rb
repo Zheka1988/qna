@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
   let(:user) { create(:user) }
-  let(:question) { create :question }
+  let(:question) { create :question, author: user }
   
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 3) }
+    let(:questions) { create_list(:question, 3, author: user) }
     before { get :index }
 
     it 'populates an array of all questions' do   
@@ -118,7 +118,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe "DELETE #destroy" do
     before { login(user) }
-    let!(:question) { create :question }
+    let!(:question) { create :question, author: user }
     
     it 'deletes the question' do
       expect{ delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)

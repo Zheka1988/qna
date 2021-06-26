@@ -5,8 +5,8 @@ feature 'User can create an answer to the question', %{
   As an authenticated user
   I'd like to be able to create answer
 } do
-   
-  given(:question) { create :question }
+  given(:user) { create :user }
+  given(:question) { create :question, author: user }
 
   context 'Authenticated user' do
     given(:user) { create :user }

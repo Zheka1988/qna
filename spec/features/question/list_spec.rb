@@ -5,8 +5,8 @@ feature 'Any user can view the list of questions', %q{
   As an any user
   I'd like to be able list of the questions
 } do
-  given!(:questions) { create_list :question, 3 }
   given(:user) { create :user }
+  given!(:questions) { create_list :question, 3, author: user }
 
   scenario 'Unauthenticated user can view the list of questions' do
     visit questions_path

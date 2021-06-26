@@ -5,9 +5,10 @@ feature 'User can view the list answers', %q{
   As an any user
   I'd like to be able list of the answers
 }do
-  given(:question) { create :question }
-  given!(:answers) { create_list :answer, 3, question: question}
-  given(:user) { create :user }
+  given(:user) { create :user } 
+  given(:question) { create :question, author: user }
+  given!(:answers) { create_list :answer, 3, question: question, author: user }
+ 
 
   scenario 'Unauthenticated user can view the list of answers' do
     visit question_path(question)
