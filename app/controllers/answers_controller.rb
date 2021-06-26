@@ -1,12 +1,14 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!
   before_action :load_question, only: [:create]
   
   def create
     @answer = @question.answers.build(answer_params)
     if @answer.save
-      redirect_to @answer
+      redirect_to @question, notice: 'Your answer has been published.'
     else
-      render :new
+      flash[:notice] = 'Your answer has not been published.'
+      render "questions/show"
     end
   end
 
