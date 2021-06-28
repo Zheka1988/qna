@@ -12,6 +12,7 @@ feature 'User can delete question', %q{
     scenario 'can delete question if he is author' do
       sign_in(user)
       visit questions_path
+      expect(page).to have_content 'MyText'
       click_on 'Delete'
       expect(page).to have_no_content 'MyText'
     end

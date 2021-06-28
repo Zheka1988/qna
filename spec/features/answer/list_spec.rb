@@ -13,13 +13,13 @@ feature 'User can view the list answers', %q{
   scenario 'Unauthenticated user can view the list of answers' do
     visit question_path(question)
 
-    expect(page).to have_content "MyText", count: 4 
+    expect(page).to have_content "MyAnswer", count: 3 
   end
 
   scenario 'Authenticated user can view the list of answers' do
     sign_in(user)
     visit question_path(question)
 
-    expect(page).to have_content "MyText", count: 4     
+    expect(page).to have_content "MyAnswer", count: 3     
   end   
 end

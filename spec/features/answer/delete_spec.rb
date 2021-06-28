@@ -13,8 +13,9 @@ feature 'User can delete answer', %q{
     scenario 'can delete answer if he is author' do
       sign_in(user)
       visit question_path(question)
+      expect(page).to have_content 'MyAnswer'
       click_on 'Delete'
-      expect(page).to have_content 'MyText', count: 1
+      expect(page).to have_no_content 'MyAnswer'
     end
 
     scenario "can't delete answer if he is not author" do
@@ -24,7 +25,7 @@ feature 'User can delete answer', %q{
     end
   end
 
-  scenario "Anathenticated user can't delete answer" do
+  scenario "Anauthenticated user can't delete answer" do
     visit question_path(question)
     expect(page).to have_no_link('Delete')
   end

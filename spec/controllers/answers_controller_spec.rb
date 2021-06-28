@@ -38,11 +38,11 @@ RSpec.describe AnswersController, type: :controller do
     let!(:other_user) { create(:user) }
     let!(:answer_false) { create :answer, question: question, author: other_user  }
 
-    it 'deletes the question if logged user is author ' do
+    it 'deletes the answer if logged user is author' do
       expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
     end
 
-    it 'deletes the question if user is not author ' do
+    it 'deletes the answer if user is not author' do
       expect { delete :destroy, params: { id: answer_false } }.to_not change(Answer, :count)
     end
 
