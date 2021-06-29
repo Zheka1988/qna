@@ -16,17 +16,16 @@ feature 'User can create an answer to the question', %{
       visit question_path(question)
     end
 
-    scenario 'tries answer the question' do
+    scenario 'tries answer the question', js: true do
       fill_in "Body", with: 'New answer'
       click_on "Reply"
 
       expect(page).to have_content 'New answer'
     end
 
-    scenario 'tries create answer with errors to the question' do
+    scenario 'tries create answer with errors to the question', js: true do
       click_on "Reply"
 
-      expect(page).to have_content "Your answer has not been published."
       expect(page).to have_content "Body can't be blank"
     end
   end

@@ -1,7 +1,12 @@
 h1= @question.title
 p= @question.body
 
-- if @question.answers
-  = render @question.answers
+.answers
+  - if @question.answers
+    = render @question.answers
 
-= render 'answers/new', resource: @question
+.answer-errors
+  = render 'shared/errors', resource: @answer
+
+.answer-new
+  = render 'answers/new', resource: @question

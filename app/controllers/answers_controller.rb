@@ -6,12 +6,7 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.build(answer_params)
     @answer.author = current_user
-    if @answer.save
-      redirect_to @question, notice: 'Your answer has been published.'
-    else
-      flash[:notice] = 'Your answer has not been published.'
-      render "questions/show"
-    end
+    @answer.save
   end
 
   def destroy
