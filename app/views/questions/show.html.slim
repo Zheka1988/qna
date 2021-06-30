@@ -1,7 +1,7 @@
 h1= @question.title
 p= @question.body
 
-.answers
+div class="answers" id="answers"
   - if @question.answers
     = render @question.answers
 

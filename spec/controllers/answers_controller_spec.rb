@@ -4,9 +4,10 @@ RSpec.describe AnswersController, type: :controller do
   let(:user) { create :user }
   let(:question) { create :question, author: user }
   let!(:answer) { create :answer, question: question, author: user }
+  
+  before { login(user) }
 
   describe 'POST #create' do
-    before { login(user) }
     context 'with valid attributes' do
       it 'saves a new answer in the database' do
         expect { post :create, params: { question_id: question, answer: attributes_for(:answer) }, format: :js }.to change(Answer, :count).by(1)
@@ -34,7 +35,6 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    before { login(user) }
     let!(:other_user) { create(:user) }
     let!(:answer_false) { create :answer, question: question, author: other_user }
 
@@ -72,7 +72,6 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before { login(user) }
     let!(:answer) { create :answer, question: question, author: user }
     let!(:other_user) { create(:user) }
     let!(:answer_false) { create :answer, question: question, author: other_user  }
@@ -88,6 +87,42 @@ RSpec.describe AnswersController, type: :controller do
     it 'render destroy view' do
       delete :destroy, params: { id: answer }, format: :js
       expect(response).to render_template :destroy
+    end
+  end
+
+  describe 'POST #best' do
+    context 'author the question' do
+      let!(:answers) { create_list :answer, 3, question: question, author: user }   
+      
+      it 'can shoose best answer' do
+        post :best, params: { id: answer, answer: { best: true } }, format: :js
+        answer.reload
+        expect(answer.best).to eq true
+      end 
+
+      it 'question have only one best answer' do
+        post :best, params: { id: Answer.second.id, answer: { best: true } }, format: :js
+        expect(Answer.where(best: true).count).to eq 1
+
+        post :best, params: { id: Answer.first.id, answer: { best: true } }, format: :js
+        expect(Answer.where(best: true).count).to eq 1        
+      end
+      it 'render best view' do
+        post :best, params: { id: answer, answer: { best: true } }, format: :js
+        expect(response).to render_template :best
+      end
+    end
+
+    context 'not author the question' do
+      let(:other_user) { create(:user) }
+      let(:question_false) { create :question, author: other_user  }
+      let!(:answer) { create :answer, question: question_false, author: user }
+
+      it 'not can shoose best answer' do
+        post :best, params: { id: answer, answer: { best: true } }, format: :js
+        answer.reload
+        expect(answer.best).to_not eq true
+      end
     end
   end
 end

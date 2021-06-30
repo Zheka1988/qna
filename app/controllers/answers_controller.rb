@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_question, only: [:create]
-  before_action :load_answer, only: [:destroy, :update]
+  before_action :load_answer, only: [:destroy, :update, :best]
   
   def create
     @answer = @question.answers.build(answer_params)
@@ -23,6 +23,15 @@ class AnswersController < ApplicationController
       @answer.destroy
     else
       flash[:notice] = "Only author the answer can delete the answer!"
+    end
+  end
+
+  def best
+    if current_user.author_of?(@question)
+      @answer.choose_best_answer
+      flash[:notice] = "the best answer is chosen"
+    else
+      flash[:notice] = "Shoose best answer for the question can only author the question!"
     end
   end
 
