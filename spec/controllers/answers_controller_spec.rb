@@ -78,16 +78,16 @@ RSpec.describe AnswersController, type: :controller do
     let!(:answer_false) { create :answer, question: question, author: other_user  }
 
     it 'deletes the answer if logged user is author' do
-      expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+      expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(-1)
     end
 
     it 'deletes the answer if user is not author' do
-      expect { delete :destroy, params: { id: answer_false } }.to_not change(Answer, :count)
+      expect { delete :destroy, params: { id: answer_false }, format: :js }.to_not change(Answer, :count)
     end
 
-    it 'redirect to question show' do
-      delete :destroy, params: { id: answer }
-      expect(response).to redirect_to question_path(question)
+    it 'render destroy view' do
+      delete :destroy, params: { id: answer }, format: :js
+      expect(response).to render_template :destroy
     end
   end
 end
