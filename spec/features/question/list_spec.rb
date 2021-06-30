@@ -12,7 +12,7 @@ feature 'Any user can view the list of questions', %q{
     visit questions_path
 
     expect(page).to have_content "MyString", count: 3
-    expect(page).to have_content "MyText", count: 3 
+    expect(page).to have_content "MyText", count: 6 
   end
 
   scenario 'Authenticated user can view the list of questions' do
@@ -20,6 +20,6 @@ feature 'Any user can view the list of questions', %q{
     visit questions_path
 
     expect(page).to have_content "MyString", count: 3
-    expect(page).to have_content "MyText", count: 3     
+    expect(page).to have_content "MyText", count: 6   
   end
 end

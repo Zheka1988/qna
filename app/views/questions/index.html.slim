@@ -1,9 +1,9 @@
 p= link_to 'Ask question', new_question_path
 
--@questions.each do |question|
-  h4= question.title
-  p= question.body
-  -if current_user&.author_of?(question)
-    = link_to 'Delete', question_path(question), 
-                        method: :delete,
-                        data: { confirm: 'You are sure' }
+.question-errors
+  = render 'shared/errors', resource: @question
+
+.questions
+  - if @questions
+    = render @questions
+         

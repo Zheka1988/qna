@@ -82,27 +82,28 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'PATCH #update' do
     before { login(user) }
-    context 'with valid attribute' do
+
+    context 'as author with valid attribute' do      
       it 'assigns the requested question to @question' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
+        patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
         expect(assigns(:question)).to eq question
       end
 
       it 'changes question attributes' do
-        patch :update, params: { id: question, question: { title: "new title", body: "new body" } }
+        patch :update, params: { id: question, question: { title: "new title", body: "new body" }, format: :js }
         question.reload
         expect(question.title).to eq "new title"
         expect(question.body).to eq "new body"
       end
 
-      it 'redirects to updated question' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
-        expect(response).to redirect_to question
+      it 'render update view' do
+        patch :update, params: { id: question, question: attributes_for(:question) , format: :js}
+        expect(response).to render_template :update
       end
     end
 
-    context "with invalid attribute" do
-      before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) } }
+    context "as author with invalid attribute" do
+      before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js }
       
       it 'does not changes question' do        
         question.reload
@@ -110,8 +111,24 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.body).to eq "MyText"
       end
 
-      it 're-render edit view' do
-        expect(response).to render_template :edit
+      it 'render update view' do
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'as not author' do
+      let!(:other_user) { create(:user) }
+      let!(:other_question) { create :question, author: other_user }
+
+      it 'attempt change question' do
+        patch :update, params: { id: other_question, other_question: { body: "new body" } }, format: :js
+        expect(response.status).to eq 403
+      end
+
+      it 'question attribute not change' do
+        expect do
+          patch :update, params: { id: other_question, other_question: { body: "new body" } }, format: :js
+        end.to_not change(other_question, :body)
       end
     end
   end
