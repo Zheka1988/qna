@@ -20,7 +20,7 @@ RSpec.describe Answer, type: :model do
     it "only one answer can be best" do
       answer.choose_best_answer
       answer2.choose_best_answer
-      expect(Answer.where(best: true, question_id: question.id).count).to eq 1
+      expect(question.answers.where(best: true).count).to eq 1
     end
   end
 end

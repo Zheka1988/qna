@@ -7,8 +7,9 @@ feature 'Author the question can shoose the best answer', %q{
 
   given!(:user) { create(:user) }
   given!(:other_user) { create(:user) }
+  
   given!(:question) { create(:question, author: user) }
-  given!(:answer) { create_list(:answer, 3, question: question, author: user) }
+  given!(:answer) { create_list(:answer, 3, question: question, author: other_user) }
 
   scenario 'Unauthenticated user can not shoose the best answer' do
     visit question_path(question)
@@ -17,7 +18,6 @@ feature 'Author the question can shoose the best answer', %q{
   end
 
   describe 'Authenticated user' do
-
     scenario 'author question, can choose best Answer', js: true do
       sign_in(user)
 
@@ -39,11 +39,4 @@ feature 'Author the question can shoose the best answer', %q{
       expect(page).to_not have_link 'Best Answer' 
     end
   end
-
-  scenario 'Unauthenticated user can not choose best answer' do
-    visit question_path(question)
-
-    expect(page).to_not have_link 'Best Answer'     
-  end
-
 end

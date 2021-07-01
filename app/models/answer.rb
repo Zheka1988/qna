@@ -7,7 +7,7 @@ class Answer < ApplicationRecord
   def choose_best_answer
     transaction do
       self.question.answers.where(best: true).update(best: false)
-      update(best: true)
+      self.update!(best: true)
     end
   end
 end

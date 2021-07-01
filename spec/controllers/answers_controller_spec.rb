@@ -99,14 +99,7 @@ RSpec.describe AnswersController, type: :controller do
         answer.reload
         expect(answer.best).to eq true
       end 
-
-      it 'question have only one best answer' do
-        post :best, params: { id: Answer.second.id, answer: { best: true } }, format: :js
-        expect(Answer.where(best: true).count).to eq 1
-
-        post :best, params: { id: Answer.first.id, answer: { best: true } }, format: :js
-        expect(Answer.where(best: true).count).to eq 1        
-      end
+      
       it 'render best view' do
         post :best, params: { id: answer, answer: { best: true } }, format: :js
         expect(response).to render_template :best
