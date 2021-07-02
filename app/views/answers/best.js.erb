@@ -1,0 +1,4 @@
+var parentElement = document.getElementById('answers');
+var first_answer = parentElement.firstChild;
+var best_answer = document.getElementById("answer-<%= @answer.id%>");
+parentElement.insertBefore(best_answer, first_answer);

@@ -10,11 +10,12 @@ feature 'User can delete answer', %q{
   given!(:answer) { create :answer, question: question, author: user }
 
   context 'Authenticated user' do   
-    scenario 'can delete answer if he is author' do
+    scenario 'can delete answer if he is author', js: true do
       sign_in(user)
       visit question_path(question)
       expect(page).to have_content 'MyAnswer'
       click_on 'Delete'
+      page.driver.browser.switch_to.alert.accept
       expect(page).to have_no_content 'MyAnswer'
     end
 
