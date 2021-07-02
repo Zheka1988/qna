@@ -8,4 +8,5 @@ Rails.application.routes.draw do
       member { post :best }
     end
   end
+  resources :attach_files, only: [:destroy]
 end

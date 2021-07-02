@@ -1,3 +1,7 @@
   - if resource.files.attached?
     - resource.files.each do |file|
       p= link_to file.filename.to_s, url_for(file)
+      - if current_user&.author_of?(resource)
+        p= link_to "Delete file", attach_file_path(file),
+            method: :delete,
+            data: { confirm: 'Are you sure?'  }
