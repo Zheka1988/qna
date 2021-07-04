@@ -25,7 +25,6 @@ module Qna
                         routing_specs: false,
                         request_specs: false,
                         controller_specs: true
-    end
-  
+    end  
   end
 end
