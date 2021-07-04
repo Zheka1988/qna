@@ -18,7 +18,6 @@ feature 'User can delete any attach file for questions', %q{
       click_on 'Save'
     end
 
-    visit question_path(question)
     click_on 'Delete file'
     page.driver.browser.switch_to.alert.accept
 
