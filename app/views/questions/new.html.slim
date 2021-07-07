@@ -8,11 +8,12 @@
   = f.label :files
   = f.file_field :files, multiple: true, direct_upload: true
 
-  p Links: 
-  = f.fields_for :links do |l|
-    = l.label :name, 'Link name'
-    = l.text_field :name
-    = l.label :url
-    = l.text_field :url
+  p Links:
+  #links
+    = f.fields_for :links do |link|
+      = render 'link_fields', f: link
+    .links
+      = link_to_add_association 'add link', f, :links
+
   p
     = f.submit 'Ask'
