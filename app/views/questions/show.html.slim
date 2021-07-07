@@ -6,6 +6,11 @@ p= @question.body
 .links-question
   = render 'shared/show_links', resource: @question
 
+.reward
+  - if @question.reward
+    p= "Reward: #{@question.reward.name}"
+    = image_tag(url_for(@question.reward.file) )
+    
 div class="answers" id="answers"
   - if @question.answers
     = render @question.answers

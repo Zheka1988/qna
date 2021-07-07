@@ -20,7 +20,7 @@ feature 'Author the question can shoose the best answer', %q{
   describe 'Authenticated user' do
     scenario 'author question, can choose best Answer', js: true do
       sign_in(user)
-
+      
       visit question_path(question)
       id_for_click = '#answer-' + Answer.second.id.to_s
 
