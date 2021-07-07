@@ -18,6 +18,7 @@ RSpec.describe Answer, type: :model do
     let!(:question) { create :question, author: user }
     let!(:answer) { create :answer, question: question, author: user }
     let!(:answer2) { create :answer, question: question, author: user }
+    let!(:reward) { create :reward, question: question}
 
     it "change best answer" do
       answer.choose_best_answer

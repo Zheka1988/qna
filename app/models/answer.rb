@@ -12,6 +12,7 @@ class Answer < ApplicationRecord
     transaction do
       question.answers.where(best: true).update(best: false)
       update!(best: true)
+      question.reward.update(user_id: self.author.id )
     end
   end
 end

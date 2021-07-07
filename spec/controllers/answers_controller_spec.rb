@@ -93,6 +93,7 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #best' do
     context 'author the question' do
       let!(:answers) { create_list :answer, 3, question: question, author: user }   
+      let!(:reward) { create :reward, question:question }
       
       it 'can shoose best answer' do
         post :best, params: { id: answer, answer: { best: true } }, format: :js

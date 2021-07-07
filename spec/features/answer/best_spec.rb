@@ -8,7 +8,8 @@ feature 'Author the question can shoose the best answer', %q{
   given!(:user) { create(:user) }
   given!(:other_user) { create(:user) }
   
-  given!(:question) { create(:question, author: user) }
+  given(:question) { create(:question, author: user) }
+  given!(:reward) { create(:reward, question: question) }
   given!(:answer) { create_list(:answer, 3, question: question, author: other_user) }
 
   scenario 'Unauthenticated user can not shoose the best answer' do
@@ -20,6 +21,7 @@ feature 'Author the question can shoose the best answer', %q{
   describe 'Authenticated user' do
     scenario 'author question, can choose best Answer', js: true do
       sign_in(user)
+      question.reward.file.attach(io: File.open(Rails.root.join('app/assets/images/oscar.ico')), filename: 'oscar.ico', content_type: 'image/x-icon')
       
       visit question_path(question)
       id_for_click = '#answer-' + Answer.second.id.to_s
@@ -34,6 +36,8 @@ feature 'Author the question can shoose the best answer', %q{
 
     scenario 'not author question, can not shoose best answer' do
       sign_in other_user
+      question.reward.file.attach(io: File.open(Rails.root.join('app/assets/images/oscar.ico')), filename: 'oscar.ico', content_type: 'image/x-icon')
+      
       visit question_path(question)
 
       expect(page).to_not have_link 'Best Answer' 
