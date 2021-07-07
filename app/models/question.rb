@@ -1,7 +1,7 @@
 class Question < ApplicationRecord
   belongs_to :author, class_name: "User", foreign_key: :author_id
   has_many :answers, dependent: :destroy
-  has_many :links, dependent: :destroy
+  has_many :links, dependent: :destroy, as: :linkable
 
   has_many_attached :files
 
