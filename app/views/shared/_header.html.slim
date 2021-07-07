@@ -3,6 +3,8 @@
     = link_to 'Logout', destroy_user_session_path, method: :delete
     = " | "
     = current_user.email
+    = " | "
+    = link_to 'View my rewards', rewards_path
 - else
   = link_to 'Sign in', new_user_session_path
   = " | "

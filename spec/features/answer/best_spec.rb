@@ -21,7 +21,6 @@ feature 'Author the question can shoose the best answer', %q{
   describe 'Authenticated user' do
     scenario 'author question, can choose best Answer', js: true do
       sign_in(user)
-      question.reward.file.attach(io: File.open(Rails.root.join('app/assets/images/oscar.ico')), filename: 'oscar.ico', content_type: 'image/x-icon')
       
       visit question_path(question)
       id_for_click = '#answer-' + Answer.second.id.to_s
@@ -36,7 +35,6 @@ feature 'Author the question can shoose the best answer', %q{
 
     scenario 'not author question, can not shoose best answer' do
       sign_in other_user
-      question.reward.file.attach(io: File.open(Rails.root.join('app/assets/images/oscar.ico')), filename: 'oscar.ico', content_type: 'image/x-icon')
       
       visit question_path(question)
 

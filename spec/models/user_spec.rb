@@ -7,7 +7,7 @@ RSpec.describe User, type: :model do
   it { should have_many(:authored_answers) }
   it { should have_many(:authored_questions) }
 
-  it { should have_one(:reward).dependent(:destroy) }
+  it { should have_many(:rewards).dependent(:destroy) }
 
   describe "Method author_of?" do
     let(:user) { create :user }
