@@ -1,0 +1,12 @@
+-if !resource.links.blank?
+  p Links:
+  ul
+    - resource.links.each do |link|
+      - if link.url.include? "https://gist"
+        div id="link-#{link.id}"
+          li= javascript_include_tag link.url
+
+      - else
+        div id="link-#{link.id}"
+          li= link_to link.name, link.url
+

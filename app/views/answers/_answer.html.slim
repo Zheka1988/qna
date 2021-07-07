@@ -2,11 +2,9 @@ div id="answer-#{answer.id}"
   -if answer.persisted?
     p= answer.body
     = render 'shared/attach_file', resource: answer
-    .links
-      p Saved links:
-      ul
-        - answer.links.each do |link|
-          li= link_to link.name, link.url
+    
+    .links-answer
+      = render 'shared/show_links', resource: answer 
 
     -if current_user&.author_of?(answer)
       = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }

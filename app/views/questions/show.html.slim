@@ -3,11 +3,8 @@ p= @question.body
 
 = render 'shared/attach_file', resource: @question
 
-.links
-  p Saved links:
-  ul
-    - @question.links.each do |link|
-      li= link_to link.name, link.url
+.links-question
+  = render 'shared/show_links', resource: @question
 
 div class="answers" id="answers"
   - if @question.answers
