@@ -9,4 +9,5 @@ Rails.application.routes.draw do
     end
   end
   resources :attach_files, only: [:destroy]
+  resources :links, only: [:destroy]
 end
