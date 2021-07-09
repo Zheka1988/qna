@@ -1,4 +1,6 @@
 class AnswersController < ApplicationController
+  include Voitinged
+  
   before_action :authenticate_user!
   before_action :load_question, only: [:create]
   before_action :load_answer, only: [:destroy, :update, :best]

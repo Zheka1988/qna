@@ -119,4 +119,53 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+
+  describe 'POST #like' do
+    context 'author' do
+      let!(:question) { create(:question, author: user) }
+      let!(:answer) { create :answer, question: question, author: user }
+
+      it 'can not voiting like the answer' do
+        post :like, params: { id: answer }, format: :js
+        expect(response).to redirect_to answer.question
+      end
+    end
+
+    context 'not author' do
+      let!(:other_user) { create(:user) }
+      let!(:other_question) { create :question, author: other_user }
+      let!(:other_answer) { create :answer, question: other_question, author: other_user }
+
+      it 'can voiting like the answer' do
+        post :like, params: { id: other_answer }, format: :js
+        other_answer.reload
+        expect(other_answer.sum_raiting).to eq 1
+      end
+    end
+  end
+
+  describe 'POST #dislike' do
+    context 'author' do
+      let!(:question) { create(:question, author: user) }
+      let!(:answer) { create :answer, question: question, author: user }
+
+      it 'can not voiting dislike the answer' do
+        post :dislike, params: { id: answer }, format: :js
+        expect(response).to redirect_to answer.question
+      end
+    end
+
+    context 'not author' do
+      let!(:other_user) { create(:user) }
+      let!(:other_question) { create :question, author: other_user }
+      let!(:other_answer) { create :answer, question: other_question, author: other_user }
+
+      it 'can voiting dislike the answer' do
+        post :dislike, params: { id: other_answer }, format: :js
+        other_answer.reload
+        expect(other_answer.sum_raiting).to eq -1
+      end
+    end
+  end
 end

@@ -1,6 +1,8 @@
 div id="answer-#{answer.id}"
   -if answer.persisted?
     p= answer.body
+    div class="raiting-#{answer.id}"
+
     = render 'shared/attach_file', resource: answer
     
     .links-answer
@@ -17,6 +19,13 @@ div id="answer-#{answer.id}"
                             class: 'best-answer-link',
                             method: :post,
                             remote: true
+    - if current_user && !(current_user.author_of?(answer))
+      = link_to "Like", like_answer_path(answer),
+              method: :post,
+              remote: true
+      = link_to "Dislike", dislike_answer_path(answer),
+              method: :post,
+              remote: true
 
   = form_with model: answer, local: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
     = f.label :body, 'Your answer'
