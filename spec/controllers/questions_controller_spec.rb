@@ -169,4 +169,50 @@ RSpec.describe QuestionsController, type: :controller do
       expect(response).to redirect_to questions_path
     end
   end
+
+  describe 'POST #like' do
+    before { login(user) }
+    context 'author' do
+      let!(:question) { create(:question, author: user) }
+
+      it 'can not voiting like the question' do
+        post :like, params: { id: question }, format: :js
+        expect(response).to render_template :index
+      end
+    end
+
+    context 'not author' do
+      let!(:other_user) { create(:user) }
+      let!(:other_question) { create :question, author: other_user }
+
+      it 'can voiting like the question' do
+        post :like, params: { id: other_question }, format: :js
+        other_question.reload
+        expect(other_question.sum_raiting).to eq 1
+      end
+    end
+  end
+
+  describe 'POST #dislike' do
+    before { login(user) }
+    context 'author' do
+      let!(:question) { create(:question, author: user) }
+
+      it 'can not voiting dislike the question' do
+        post :dislike, params: { id: question }, format: :js
+        expect(response).to render_template :index
+      end
+    end
+
+    context 'not author' do
+      let!(:other_user) { create(:user) }
+      let!(:other_question) { create :question, author: other_user }
+
+      it 'can voiting dislike the question' do
+        post :dislike, params: { id: other_question }, format: :js
+        other_question.reload
+        expect(other_question.sum_raiting).to eq -1
+      end
+    end
+  end
 end

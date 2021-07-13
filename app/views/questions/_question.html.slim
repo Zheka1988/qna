@@ -1,6 +1,8 @@
 div id="question-#{question.id}"
   h4= question.title
   p= question.body
+  div class="raiting-#{question.id}"
+
   = render 'shared/attach_file', resource: question
   .links-question
     = render 'shared/show_links', resource: question
@@ -10,6 +12,14 @@ div id="question-#{question.id}"
     = link_to 'Delete', question_path(question), 
                         method: :delete,
                         data: { confirm: 'You are sure' }
+  
+  - if current_user && !(current_user.author_of?(question))
+    = link_to "Like", like_question_path(question),
+            method: :post,
+            remote: true
+    = link_to "Dislike", dislike_question_path(question),
+            method: :post,
+            remote: true
 
   = form_with model: question, class: 'hidden', local: false, html: { id: "edit-question-#{question.id}" } do |f|
     = f.label :title, 'Title question'
