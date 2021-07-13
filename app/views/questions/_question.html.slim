@@ -1,6 +1,8 @@
-div id="question-#{question.id}"
+div id="question-#{question.id}" class="border border-dark my-2 p-1"
   h4= question.title
   p= question.body
+  = link_to 'Show', question_path(question), class: 'show-question-link'
+  
   div class="raiting-#{question.id}"
 
   = render 'shared/attach_file', resource: question

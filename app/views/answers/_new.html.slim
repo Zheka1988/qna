@@ -1,14 +1,14 @@
-= form_with model: [@question, @answer], local: false, class: 'new-answer' do |f|
+= form_with model: [@question, @answer], local: false, class: 'new-answer form-group' do |f|
   = f.label :body
-  = f.text_area :body
+  = f.text_area :body, class: "form-control"
   = f.label :files
-  = f.file_field :files, multiple: true, direct_upload: true
+  = f.file_field :files, multiple: true, direct_upload: true, class: "form-control"
 
-  p Links:
-  #links
+  div id="links" class="border border-dark p-1 rounded m-1"
+    p Links:
     = f.fields_for :links do |link|
       = render 'link_fields', f: link
     .links
       = link_to_add_association 'add link', f, :links
     
-  = f.submit 'Reply'
+  = f.submit 'Reply', class: "btn btn-primary"

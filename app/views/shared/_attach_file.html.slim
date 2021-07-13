@@ -1,3 +1,4 @@
+  h4= "Attached files:"  
   - if resource.files.attached?
     - resource.files.each do |file|
       p= link_to file.filename.to_s, url_for(file)

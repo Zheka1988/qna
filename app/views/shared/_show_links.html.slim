@@ -1,5 +1,5 @@
 -if !resource.links.blank?
-  p Links:
+  h4= "Links:"
   ul
     - resource.links.each do |link|
       - if link.url.include? "https://gist"

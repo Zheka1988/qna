@@ -1,22 +1,27 @@
-h1= @question.title
-p= @question.body
+div class="question-show w-50 m-2" id="question-#{@question.id}"
+  h1= @question.title
+  p class="body-question m-2"
+    = @question.body
+  div class="border m-1"
+    = render 'shared/attach_file', resource: @question
 
-= render 'shared/attach_file', resource: @question
+  div class="border links-question m-1 p-1"
+    = render 'shared/show_links', resource: @question
 
-.links-question
-  = render 'shared/show_links', resource: @question
-
-.reward
-  - if @question.reward
-    p= "Reward: #{@question.reward.name}"
-    = image_tag(url_for(@question.reward.file) )
+  div class="border reward m-1"
+    - if @question.reward
+      h4= "Reward:"
+      p= "#{@question.reward.name}"
+      = image_tag(url_for(@question.reward.file) )
     
 div class="answers" id="answers"
+  div class="text-center"
+    h4= "Answers:"
   - if @question.answers
     = render @question.answers
 
-.answer-errors
-  = render 'shared/errors', resource: @answer
+  .answer-errors
+    = render 'shared/errors', resource: @answer
 
-.answer-new
+div class="answer-new border border-dark p-1 rounded m-1"
   = render 'answers/new', resource: @question

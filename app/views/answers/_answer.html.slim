@@ -1,4 +1,4 @@
-div id="answer-#{answer.id}"
+div class="border border-danger m-1 p-1" id="answer-#{answer.id}"
   -if answer.persisted?
     p= answer.body
     div class="raiting-#{answer.id}"

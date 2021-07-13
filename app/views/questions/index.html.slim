@@ -1,9 +1,10 @@
-p= link_to 'Ask question', new_question_path
-
-.question-errors
-  = render 'shared/errors', resource: @question
-
 .questions
+  div class="new-question-link"
+    = link_to 'Ask question', new_question_path
+
+  div class="question-errors"
+    = render 'shared/errors', resource: @question
+
   - if @questions
     = render @questions
          
