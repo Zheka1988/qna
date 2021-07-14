@@ -14,6 +14,8 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answer.links.new
+
+    @commentable = @question
   end
 
   def new
@@ -105,7 +107,8 @@ class QuestionsController < ApplicationController
   def question_params
     params.require(:question).permit(:title, :body, files: [],
                                       links_attributes: [:name, :url],
-                                      reward_attributes: [:name, :file])
+                                      reward_attributes: [:name, :file],
+                                      comment_attributes: [:body] )
   end
 
   def load_question
