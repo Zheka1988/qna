@@ -5,6 +5,8 @@ class QuestionsController < ApplicationController
   before_action :load_question, only: %i[show edit update destroy]
   after_action :publish_question, only: [:create]
 
+  before_action :gon_question, only: [:show]
+
   def index
     @questions = Question.all
   end
@@ -48,6 +50,10 @@ class QuestionsController < ApplicationController
   end
 
   private
+  def gon_question
+    gon.question_id = @question.id
+  end
+  
   def publish_question
     return if @question.errors.any?
     
