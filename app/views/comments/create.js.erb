@@ -1,0 +1,11 @@
+$('.answer-errors').html('<%= render 'shared/errors', resource: @comment %>');
+
+<% if @comment.persisted? %>
+  <% if @comment.commentable.class.name == "Question" %>
+    $('#question-<%= @comment.commentable.id %> .comments-question').append('<%= j render @comment %>');
+    $('.new-comment #comment_body').val('');
+  <% elsif @comment.commentable.class.name == "Answer" %>
+    $('#answer-<%= @comment.commentable.id %> .comments-answer').append('<%= j render @comment %>');
+    $('.new-comment #comment_body').val('');    
+  <% end %>
+<% end %>

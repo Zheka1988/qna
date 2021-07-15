@@ -1,0 +1,5 @@
+        = form_with model: [resource, Comment.new], local: false, class: 'new-comment form-group' do |f|
+          = f.hidden_field :commentable, value: resource.class.name
+          = f.label :body
+          = f.text_area :body, class: "form-control"
+          = f.submit 'Add Comment', class: 'btn btn-primary my-2 btn-sm'  
