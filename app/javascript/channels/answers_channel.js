@@ -2,7 +2,7 @@ import consumer from "./consumer"
 
 consumer.subscriptions.create("AnswersChannel", {
   connected() {
-    console.log("Connected!  -id: " + gon.question_id);
+
     // Called when the subscription is ready for use on the server
     this.perform('start_st_answers', { question_id: gon.question_id } )
 
