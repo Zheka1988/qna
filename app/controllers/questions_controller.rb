@@ -3,6 +3,9 @@ class QuestionsController < ApplicationController
   
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: %i[show edit update destroy]
+  after_action :publish_question, only: [:create]
+
+  before_action :gon_question, only: [:show]
 
   def index
     @questions = Question.all
@@ -47,10 +50,63 @@ class QuestionsController < ApplicationController
   end
 
   private
+  def gon_question
+    gon.question_id = @question.id
+  end
+  
+  def publish_question
+    return if @question.errors.any?
+    
+    files = {}
+    @question.files.each_with_index do |f, index|
+      file = Hash.new
+      file[:id] = f.id
+      file[:file_name] = f.filename.to_s
+      file[:file_url] = rails_blob_path(f, only_path: true)
+      files[index] = file
+    end
+
+    links = {}
+    @question.links.each_with_index do |l, index|
+      link = Hash.new
+      link[:id] = l.id
+      link[:name] = l.name
+      link[:url] = l.url
+      links[index] = link
+    end
+
+    reward = {}
+    if @question.reward
+      reward[:id] = @question.reward.id
+      reward[:name] = @question.reward.name
+      reward[:url_file] = rails_blob_path(@question.reward.file, only_path: true)
+    end
+
+    ActionCable.server.broadcast(
+      'questions',
+      ApplicationController.render(
+        json: { id: @question.id,
+                title: @question.title,
+                body: @question.body, 
+                files: files,
+                links: links,
+                reward: reward
+              }
+      )
+      # {
+      #   question: ApplicationController.render(
+      #     locals: { question: @question },
+      #     partial: 'questions/question'
+      #   )
+      # }
+    )
+  end
+
   def question_params
     params.require(:question).permit(:title, :body, files: [],
                                       links_attributes: [:name, :url],
-                                      reward_attributes: [:name, :file])
+                                      reward_attributes: [:name, :file],
+                                      comment_attributes: [:body] )
   end
 
   def load_question

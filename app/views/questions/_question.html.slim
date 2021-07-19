@@ -22,6 +22,7 @@ div id="question-#{question.id}" class="border border-dark my-2 p-1"
     = link_to "Dislike", dislike_question_path(question),
             method: :post,
             remote: true
+  
 
   = form_with model: question, class: 'hidden', local: false, html: { id: "edit-question-#{question.id}" } do |f|
     = f.label :title, 'Title question'

@@ -13,12 +13,23 @@ div class="question-show w-50 m-2" id="question-#{@question.id}"
       h4= "Reward:"
       p= "#{@question.reward.name}"
       = image_tag(url_for(@question.reward.file) )
-    
+
+  div class="border border-dark p-1 rounded m-1"
+    div class="comments-question text-center"
+      h3= "Comments for question"
+      - if @question.comments && current_user
+        = render @question.comments
+
+    div class="comment-answer-new"
+      - if current_user
+        = render 'shared/new_comment', resource: @question
+      
 div class="answers" id="answers"
   div class="text-center"
     h4= "Answers:"
   - if @question.answers
     = render @question.answers
+
 
   .answer-errors
     = render 'shared/errors', resource: @answer

@@ -27,6 +27,18 @@ div class="border border-danger m-1 p-1" id="answer-#{answer.id}"
               method: :post,
               remote: true
 
+  div class="border border-dark p-1 rounded m-1"
+    div class="comments-answer text-center"
+      h3= "Comments for answer"
+      - if answer.comments && current_user
+        = render answer.comments
+
+    div class="comment-answer-new"
+      - if current_user 
+        = render 'shared/new_comment', resource: answer
+
+
+
   = form_with model: answer, local: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
     = f.label :body, 'Your answer'
     = f.text_area :body

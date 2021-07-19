@@ -48,4 +48,33 @@ feature 'User can create an answer to the question', %{
     
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end
+
+  describe "multiple sessions" do
+    scenario "question appears on another user's page", js: true do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        fill_in 'Body', with: 'answer answer answer'
+        click_on 'Reply'
+
+        within '.answers' do
+          expect(page).to have_content 'answer answer answer'
+        end
+
+      end
+
+      Capybara.using_session('guest') do
+        within '.answers' do
+          expect(page).to have_content 'answer answer answer'
+        end
+      end
+    end
+  end
 end
