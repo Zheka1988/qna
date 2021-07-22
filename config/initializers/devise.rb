@@ -275,6 +275,15 @@ Devise.setup do |config|
                   Rails.application.credentials[Rails.env.to_sym][:github][:app_id],
                   Rails.application.credentials[Rails.env.to_sym][:github][:app_secret], 
                   scope: 'user:email, read:user'
+
+  config.omniauth :facebook, 
+                  Rails.application.credentials[Rails.env.to_sym][:facebook][:app_id],
+                  Rails.application.credentials[Rails.env.to_sym][:facebook][:app_secret],
+                  info_fields: 'email, first_name, last_name, picture'
+                  # token_params: { parse: :json }
+
+
+                  # scope: 'user:email, read:user'
   # OmniAuth.config.logger = Rails.logger if Rails.env.development?
 
   # ==> Warden configuration
