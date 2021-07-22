@@ -13,11 +13,13 @@ feature 'User can delete link for answer', %q{
   background do
     sign_in user
     visit question_path(question)
-
-    fill_in "Body", with: 'New answer'
-    fill_in 'Link name', with: 'My gist'
-    fill_in 'Url', with: google
-    click_on "Reply" 
+    
+    within ".new-answer" do
+      fill_in "Body", with: 'New answer'
+      fill_in 'Link name', with: 'My gist'
+      fill_in 'Url', with: google
+      click_on "Reply" 
+    end
   end
   
   scenario 'delete link if user author the answer', js: true do

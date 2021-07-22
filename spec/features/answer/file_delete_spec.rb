@@ -17,9 +17,10 @@ feature 'User can delete any attach file for answer', %q{
       click_on 'Edit'
       attach_file 'Files', ["#{Rails.root}/spec/spec_helper.rb"]
       click_on 'Save'
+      click_on 'Delete file'
     end
 
-    click_on 'Delete file'
+    
     page.driver.browser.switch_to.alert.accept
 
     expect(page).to_not have_link 'spec_helper.rb"'

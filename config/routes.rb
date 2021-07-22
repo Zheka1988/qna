@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks' }
+
   root to: "questions#index"
 
   concern :voitingable do
@@ -23,5 +24,5 @@ Rails.application.routes.draw do
   resources :attach_files, only: [:destroy]
   resources :links, only: [:destroy]
   resources :rewards, only: [:index]
-
+  
 end
