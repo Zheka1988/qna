@@ -35,9 +35,11 @@ feature 'User can edit his answer', %q{
         click_on 'Save'
 
         expect(page).to_not have_content answer.body
-        expect(page).to have_content 'Edited answer'
-        expect(page).to_not have_selector 'textarea'
-        
+        expect(page).to have_content 'Edited answer'        
+        within "#answer-#{answer.id}" do
+          # expect(page).to_not have_selector 'textarea'
+          expect(page).to_not have_css 'edit-answer-textarea'
+        end
         expect(page).to have_link 'rails_helper.rb'
         expect(page).to have_link 'spec_helper.rb'
 

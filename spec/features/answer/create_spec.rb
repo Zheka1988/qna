@@ -17,9 +17,10 @@ feature 'User can create an answer to the question', %{
     end
 
     scenario 'tries answer the question', js: true do
-      fill_in "Body", with: 'New answer'
-      click_on "Reply"
-
+      within ".new-answer" do
+        fill_in "Body", with: 'New answer'
+        click_on "Reply"
+      end
       expect(page).to have_content 'New answer'
     end
 
@@ -30,10 +31,11 @@ feature 'User can create an answer to the question', %{
     end
 
     scenario 'create a answer with attached file', js: true do
-      fill_in 'Body', with: 'New answer'
-      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
-      click_on 'Reply'
-
+      within ".new-answer" do
+        fill_in 'Body', with: 'New answer'
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Reply'
+      end
       within '.answers' do
         expect(page).to have_link 'rails_helper.rb'
         expect(page).to have_link 'spec_helper.rb'
@@ -61,9 +63,10 @@ feature 'User can create an answer to the question', %{
       end
 
       Capybara.using_session('user') do
-        fill_in 'Body', with: 'answer answer answer'
-        click_on 'Reply'
-
+        within ".new-answer" do
+          fill_in 'Body', with: 'answer answer answer'
+          click_on 'Reply'
+        end
         within '.answers' do
           expect(page).to have_content 'answer answer answer'
         end

@@ -4,7 +4,7 @@
   = f.label :files
   = f.file_field :files, multiple: true, direct_upload: true, class: "form-control"
 
-  div id="links" class="border border-dark p-1 rounded m-1"
+  div id="links" class="links-answer-new border border-dark p-1 rounded m-1"
     p Links:
     = f.fields_for :links do |link|
       = render 'link_fields', f: link
