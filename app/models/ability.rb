@@ -25,17 +25,17 @@ class Ability
     quest_abilities
     can :create, [Question, Answer, Comment]
     can [:update, :destroy], [Question, Answer, Comment], author: user
-    can [:like, :dislike], Question, Question do |question|
+    can [:like, :dislike], Question do |question|
       !(user.author_of?(question))
     end
     cannot [:like, :dislike], Question, author: user
     
-    can [:like, :dislike], Answer, Answer do |answer|
+    can [:like, :dislike], Answer do |answer|
       !(user.author_of?(answer))
     end
     cannot [:like, :dislike], Answer, author: user
 
-    can :best, Answer, Answer do |answer|
+    can :best, Answer do |answer|
       user.author_of?(answer.question)
     end
   end
