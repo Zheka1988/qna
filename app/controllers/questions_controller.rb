@@ -2,6 +2,8 @@ class QuestionsController < ApplicationController
   include Voitinged
   
   before_action :authenticate_user!, except: [:index, :show]
+  authorize_resource
+
   before_action :load_question, only: %i[show edit update destroy]
   after_action :publish_question, only: [:create]
 

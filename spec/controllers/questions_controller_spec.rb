@@ -138,6 +138,8 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'attempt change question' do
         patch :update, params: { id: other_question, other_question: { body: "new body" } }, format: :js
+        # expect(response).to redirect_to(root_path)
+        # expect(request.flash[:alert]).to eq('You are not authorized to access this page.')
         expect(response.status).to eq 403
       end
 
@@ -178,6 +180,8 @@ RSpec.describe QuestionsController, type: :controller do
       it 'can not voiting like the question' do
         post :like, params: { id: question }, format: :js
         expect(response).to render_template :index
+        # expect(response).to redirect_to(root_path)
+        # expect(request.flash[:alert]).to eq('You are not authorized to access this page.')
       end
     end
 
