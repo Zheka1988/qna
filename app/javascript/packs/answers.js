@@ -11,4 +11,12 @@ $(document).on('turbolinks:load', function(){
     console.log(voiting.voitingable_id)
     $('.answers #answer-' + voiting.voitingable_id + ' .raiting-' + voiting.voitingable_id).html(voiting.sum_raiting);
   })
+    .on('ajax:error', function (e) {
+      var errors = e.detail[0];
+
+      $.each(errors, function(index, value) {
+          $('.answer-errors').append('<p>' + value + '</p>');
+      })
+
+  })
 });

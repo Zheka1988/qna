@@ -2,16 +2,14 @@ class ApplicationController < ActionController::Base
   before_action :gon_user, unless: :devise_controller?
   
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, alert: exception.message
+    respond_to do |format|
+      format.js   { head :forbidden, alert: exception.message }
+      format.html { redirect_to root_url, alert: exception.message }
+    end
   end
-
-  # check_authorization
-  
   private
   
   def gon_user
     gon.user_id = current_user.id if current_user
   end
-
-
 end

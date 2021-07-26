@@ -2,13 +2,13 @@ class AnswersController < ApplicationController
   include Voitinged
   
   before_action :authenticate_user!
-  authorize_resource
-  
   before_action :load_question, only: [:create]
   before_action :load_answer, only: [:destroy, :update, :best]
 
   after_action :publish_answer, only: [:create]
   
+  authorize_resource
+
   def create
     @answer = @question.answers.build(answer_params)
     @answer.author = current_user
@@ -16,29 +16,15 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if current_user.author_of?(@answer)
-      @answer.update(answer_params)
-    else
-      flash[:notice] = "Only author the answer can change the answer!"
-      redirect_to @answer.question
-    end
+    @answer.update(answer_params)
   end
 
   def destroy
-    if current_user.author_of?(@answer)
-      @answer.destroy
-    else
-      flash[:notice] = "Only author the answer can delete the answer!"
-    end
+    @answer.destroy
   end
 
   def best
-    if current_user.author_of?(@question)
-      @answer.choose_best_answer
-      flash[:notice] = "the best answer is chosen"
-    else
-      flash[:notice] = "Shoose best answer for the question can only author the question!"
-    end
+    @answer.choose_best_answer
   end
 
   private

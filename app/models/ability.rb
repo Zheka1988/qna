@@ -9,11 +9,11 @@ class Ability
     if user 
       user.admin? ? admin_abilities : user_abilities
     else
-      quest_abilities
+      guest_abilities
     end
   end
 
-  def quest_abilities
+  def guest_abilities
     can :read, :all
   end
 
@@ -22,18 +22,15 @@ class Ability
   end
 
   def user_abilities
-    quest_abilities
+    guest_abilities
     can :create, [Question, Answer, Comment]
-    can [:update, :destroy], [Question, Answer, Comment], author: user
-    can [:like, :dislike], Question do |question|
-      !(user.author_of?(question))
+    can [:update, :destroy], [Question, Answer, Comment], author_id: user.id
+
+    can [:like, :dislike], [Question, Answer] do |resource|
+      !user.author_of?(resource)
     end
-    cannot [:like, :dislike], Question, author: user
-    
-    can [:like, :dislike], Answer do |answer|
-      !(user.author_of?(answer))
-    end
-    cannot [:like, :dislike], Answer, author: user
+
+    cannot [:like, :dislike], [Question, Answer], author_id: user.id
 
     can :best, Answer do |answer|
       user.author_of?(answer.question)
