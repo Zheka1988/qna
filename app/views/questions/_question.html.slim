@@ -9,13 +9,13 @@ div id="question-#{question.id}" class="border border-dark my-2 p-1"
   .links-question
     = render 'shared/show_links', resource: question
 
-  -if current_user&.author_of?(question)
+  -if can?(:destroy, question)
     = link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id }
     = link_to 'Delete', question_path(question), 
                         method: :delete,
                         data: { confirm: 'You are sure' }
   
-  - if current_user && !(current_user.author_of?(question))
+  -if can?(:like, question)
     = link_to "Like", like_question_path(question),
             method: :post,
             remote: true

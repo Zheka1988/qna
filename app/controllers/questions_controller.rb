@@ -7,6 +7,8 @@ class QuestionsController < ApplicationController
 
   before_action :gon_question, only: [:show]
 
+  authorize_resource
+  
   def index
     @questions = Question.all
   end
@@ -18,7 +20,7 @@ class QuestionsController < ApplicationController
 
   def new
     @question = Question.new
-    @question.links.new # .build
+    @question.links.new
     @question.build_reward
   end
 
@@ -35,18 +37,12 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if current_user.author_of?(@question)
-      @question.update(question_params)
-    else
-      head :forbidden
-    end
+    @question.update(question_params)
   end
 
   def destroy
-    if current_user.author_of?(@question)
-      @question.destroy
-      redirect_to questions_path
-    end
+    @question.destroy
+    redirect_to questions_path
   end
 
   private
@@ -93,12 +89,6 @@ class QuestionsController < ApplicationController
                 reward: reward
               }
       )
-      # {
-      #   question: ApplicationController.render(
-      #     locals: { question: @question },
-      #     partial: 'questions/question'
-      #   )
-      # }
     )
   end
 

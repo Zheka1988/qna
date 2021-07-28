@@ -24,8 +24,8 @@ gem 'jbuilder', '~> 2.7'
 gem 'omniauth'
 gem 'omniauth-github'
 gem 'omniauth-facebook'
-# gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
 gem 'omniauth-rails_csrf_protection'
+ gem 'cancancan'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'

@@ -5,6 +5,8 @@ class CommentsController < ApplicationController
   after_action :publish_comment, only: [:create]
   after_action :load_question, only: [:create]
 
+  authorize_resource
+  
   def create
     @comment = @commentable.comments.new comment_params
     @comment.author = current_user
