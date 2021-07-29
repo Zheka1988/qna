@@ -24,20 +24,61 @@ describe 'Answers API', type: :request do
       end
 
       it 'returns list of answers' do
-        expect(json.size).to eq 3
+        expect(json['answers'].size).to eq 3
       end
 
       it 'returns all public fields' do
         %w[id body created_at updated_at best question_id author_id].each do |attr|
-          expect(json.first[attr]).to eq answers.first.send(attr).as_json
+          expect(json['answers'].first[attr]).to eq answers.first.send(attr).as_json
         end
       end
 
       it 'all answers belong to the question' do
         id_s = []
-        json.each  {  |answer| id_s << answer['question_id'].to_i }
+        json['answers'].each  {  |answer| id_s << answer['question_id'].to_i }
         expect(id_s.inject(:+)).to eq question.id * 3
       end
     end
   end
+
+  describe 'GET /api/v1/answers/:id' do
+    let!(:answer) { create :answer, question: question, author: user }
+    let!(:link) { answer.links.create(url: "http://example.com", name: "example") }
+    let!(:comment) { answer.comments.create(body: 'first_comment', author: user) }
+    let!(:file) { answer.files.attach(io: File.open("#{Rails.root}/spec/spec_helper.rb"),
+                  filename: 'spec_helper.rb', content_type: 'file/rb') }
+    
+    it_behaves_like 'API Authorizable' do
+      let(:api_path) { "/api/v1/answers/#{answer.id}" }
+      let(:method) { :get }
+    end
+
+    context "authorized" do
+      let(:access_token) { create :access_token }
+      before { get "/api/v1/answers/#{answer.id}", params: { access_token: access_token.token }, headers: headers }
+
+      it 'returns 200 status' do
+        expect(response).to be_successful
+      end
+
+      it 'returns the answer' do
+        expect(json['answer']['id']).to eq answer.id
+      end
+
+      it 'return links of the answer' do
+        expect(json['answer']['links'].first['name']).to eq link.name
+      end
+
+      it 'return comments of the answer' do
+        expect(json['answer']['comments'].first['body']).to eq comment.body
+      end
+
+      it 'return only link for attached files' do
+        name = question.files.first.filename
+        expect(json['answer']['files'][name]).to eq rails_blob_path(file, only_path: true)
+      end
+
+    end
+  end
+
 end
