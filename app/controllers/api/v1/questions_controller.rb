@@ -1,6 +1,7 @@
 class Api::V1::QuestionsController < Api::V1::BaseController
-  before_action :load_question, only: [:show]
+  before_action :load_question, only: [:show, :destroy]
 
+  authorize_resource
   def index
     @questions = Question.all
 
@@ -9,6 +10,14 @@ class Api::V1::QuestionsController < Api::V1::BaseController
 
   def show
     render json: @question, inlcude: [:comments, :links, :files] 
+  end
+
+  def create
+
+  end
+
+  def destroy
+    @question.destroy
   end
 
   private

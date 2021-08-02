@@ -13,12 +13,12 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: [:voitingable] do
-    resources :comments, only: [:create]#, defaults: { context: 'question' }
+    resources :comments, only: [:create]
 
     resources :answers, shallow: true, concerns: [:voitingable], only: [:create, :update, :destroy] do
       member { post :best }
 
-      resources :comments, only: [:create]#, defaults: { context: 'answer' }
+      resources :comments, only: [:create]
     end
   end
 
@@ -30,10 +30,10 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :profiles, only: [] do
         get :me, on: :collection
-        get :all, on: :collection
+        get :index, on: :collection
       end
       
-      resources :questions, only: [:index, :show] do
+      resources :questions, only: [:index, :show, :create, :destroy] do
         resources :answers, only: [:index, :show], shallow: true
       end
     end

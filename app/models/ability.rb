@@ -35,5 +35,7 @@ class Ability
     can :best, Answer do |answer|
       user.author_of?(answer.question)
     end
+
+    can [:me, :index], User, id: user.id
   end
 end
