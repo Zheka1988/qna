@@ -36,6 +36,16 @@ class Ability
       user.author_of?(answer.question)
     end
 
+    can :destroy, AttachFilesController do |file|
+      user.author_of?(@file.record)
+    end
+
+    can :destroy, Link do |link|
+      user.author_of?(link.linkable)
+    end
+
+    can :index, Reward, id: user.id
+
     can [:me, :index], User, id: user.id
   end
 end

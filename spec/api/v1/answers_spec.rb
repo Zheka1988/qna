@@ -1,11 +1,12 @@
 require 'rails_helper'
+include Rails.application.routes.url_helpers
 
 describe 'Answers API', type: :request do
   let(:headers) { { "CONTENT_TYPE" => "application/json",
                     "ACCEPT" => 'application/json' }  }
 
   let(:user) { create :user }
-  let(:question) { create :question, author: user }
+  let!(:question) { create :question, author: user }
   
   describe 'GET /api/v1/questions/:id/answers' do
     it_behaves_like 'API Authorizable' do
@@ -74,8 +75,10 @@ describe 'Answers API', type: :request do
       end
 
       it 'return only link for attached files' do
-        name = question.files.first.filename
-        expect(json['answer']['files'][name]).to eq rails_blob_path(file, only_path: true)
+        name = answer.files.first.filename
+        # expect(json['answer']['files'][name]).to eq rails_blob_path(file, only_path: true)
+        expect(json['answer']['files'][name]).to eq rails_blob_url(file)
+        # expect(json['answer']['files'][name]).to eq file.service_url
       end
 
     end
