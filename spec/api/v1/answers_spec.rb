@@ -1,9 +1,7 @@
 require 'rails_helper'
-include Rails.application.routes.url_helpers
 
 describe 'Answers API', type: :request do
-  let(:headers) { { "CONTENT_TYPE" => "application/json",
-                    "ACCEPT" => 'application/json' }  }
+  let(:headers) { { "ACCEPT" => 'application/json' }  }
 
   let(:user) { create :user }
   let!(:question) { create :question, author: user }
@@ -46,8 +44,12 @@ describe 'Answers API', type: :request do
     let!(:answer) { create :answer, question: question, author: user }
     let!(:link) { answer.links.create(url: "http://example.com", name: "example") }
     let!(:comment) { answer.comments.create(body: 'first_comment', author: user) }
-    let!(:file) { answer.files.attach(io: File.open("#{Rails.root}/spec/spec_helper.rb"),
-                  filename: 'spec_helper.rb', content_type: 'file/rb') }
+    let!(:file) { answer.files.first }
+
+    before do
+      answer.files.attach(io: File.open("#{Rails.root}/spec/spec_helper.rb"),
+                  filename: 'spec_helper.rb', content_type: 'file/rb')
+    end
     
     it_behaves_like 'API Authorizable' do
       let(:api_path) { "/api/v1/answers/#{answer.id}" }
@@ -76,12 +78,90 @@ describe 'Answers API', type: :request do
 
       it 'return only link for attached files' do
         name = answer.files.first.filename
-        # expect(json['answer']['files'][name]).to eq rails_blob_path(file, only_path: true)
-        expect(json['answer']['files'][name]).to eq rails_blob_url(file)
-        # expect(json['answer']['files'][name]).to eq file.service_url
+
+        expect(json['answer']['files']["#{name}"]).to eq Rails.application.routes.url_helpers.rails_blob_url(file, only_path: true)
       end
 
     end
   end
 
+  describe 'DELETE /api/v1/answers/:id' do
+    let(:user) { create :user }
+    let!(:question) { create :question, author: user }
+    let!(:answers) { create_list :answer, 3, question: question, author: user }
+    let!(:answer) { create :answer, question: question, author: user }
+
+    it_behaves_like 'API Authorizable' do
+      let(:api_path) { "/api/v1/answers/#{answers.first.id}" }
+      let(:method) { :delete }
+    end
+
+    context 'authorized' do
+      let(:access_token) { create :access_token, resource_owner_id: user.id }
+
+      before { delete "/api/v1/answers/#{answers.first.id}", params: { access_token: access_token.token }, headers: headers }
+
+      it 'returns 200 status' do
+        expect(response).to be_successful
+      end
+
+      it 'return deleted question' do
+        expect(json['answer']['body']).to eq answers.first.body
+      end
+
+      it 'deletes the question if logged user is author' do       
+        expect{ delete "/api/v1/answers/#{answer.id}", params: { access_token: access_token.token }, headers: headers }.to change(Answer, :count).by(-1)
+      end
+    end
+  end
+
+  describe 'POST /api/v1/questions/:question_id/answers' do
+    let(:user) { create :user }
+
+    it_behaves_like 'API Authorizable' do
+      let(:api_path) { "/api/v1/questions/#{question.id}/answers" }
+      let(:method) { :post }
+    end
+
+    context 'authorized' do
+      let(:access_token) { create :access_token, resource_owner_id: user.id }
+
+      before { post "/api/v1/questions/#{question.id}/answers", params: { access_token: access_token.token, answer: attributes_for(:answer)  }, headers: headers }
+
+      it 'returns 200 status' do
+        expect(response).to be_successful
+      end
+
+      it 'added question in db' do
+        expect { post "/api/v1/questions/#{question.id}/answers", params: { access_token: access_token.token, answer: attributes_for(:answer) } }.to change(Answer, :count).by(1)
+      end
+    end
+  end
+
+  describe 'PATCH /api/v1/answers/:id' do    
+    let(:user) { create :user }
+    let!(:question) { create :question, author: user }
+    let!(:answer) { create :answer, question: question, author: user }
+
+    it_behaves_like 'API Authorizable' do
+      let(:api_path) { "/api/v1/answers/#{answer.id}" }
+      let(:method) { :patch }
+    end
+
+    context 'authorized' do
+      let(:access_token) { create :access_token }
+
+      before { patch "/api/v1/answers/#{answer.id}", params: { access_token: access_token.token, 
+                                                                   answer: { body: 'New Body' } }, headers: headers }
+
+      it 'returns 200 status' do
+        expect(response).to be_successful
+      end
+
+      it 'the question change body and title ' do
+        answer.reload
+        expect(answer.body).to eq 'New Body'
+      end
+    end
+  end
 end

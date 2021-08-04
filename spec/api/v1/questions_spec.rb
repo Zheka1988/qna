@@ -1,9 +1,8 @@
 require 'rails_helper'
-include Rails.application.routes.url_helpers
 
 describe 'Questions API', type: :request do
-  let(:headers) { { "CONTENT_TYPE" => "application/json",
-                    "ACCEPT" => 'application/json' }  }
+  let(:headers) { { "ACCEPT" => 'application/json' }  }
+
 
   describe 'GET /api/v1/questions' do
     it_behaves_like 'API Authorizable' do
@@ -47,12 +46,19 @@ describe 'Questions API', type: :request do
   end
 
   describe 'GET /api/v1/questions/:id' do
+    
     let(:user) { create :user }
     let!(:question) { create :question, author: user }
     let!(:link) { question.links.create(url: "http://example.com", name: "example") }
     let!(:comment) { question.comments.create(body: 'first_comment', author: user) }
-    let!(:file) { question.files.attach(io: File.open("#{Rails.root}/spec/spec_helper.rb"),
-                  filename: 'spec_helper.rb', content_type: 'file/rb') }
+    
+    let(:file) { question.files.first }
+
+    before do
+      question.files.attach(io: File.open("#{Rails.root}/spec/spec_helper.rb"),
+                  filename: 'spec_helper.rb', content_type: 'file/rb')
+    end
+    
 
     it_behaves_like 'API Authorizable' do
       let(:api_path) { "/api/v1/questions/#{question.id}" }
@@ -82,8 +88,89 @@ describe 'Questions API', type: :request do
 
       it 'return only link for attached files' do
         name = question.files.first.filename
-        expect(json['question']['files'][name]).to eq rails_blob_path(file, only_path: true)
+        
+        expect(json['question']['files']["#{name}"]).to eq rails_blob_path(file)
       end
     end
   end
+
+  describe 'DELETE /api/v1/questions/:id' do
+    let(:user) { create :user }
+    let!(:questions) { create_list :question, 3, author: user }
+    let!(:question) { create :question, author: user }
+
+    it_behaves_like 'API Authorizable' do
+      let(:api_path) { "/api/v1/questions/#{questions.first.id}" }
+      let(:method) { :delete }
+    end
+
+    context 'authorized' do
+      let(:access_token) { create :access_token, resource_owner_id: user.id }
+
+      before { delete "/api/v1/questions/#{questions.first.id}", params: { access_token: access_token.token }, headers: headers }
+
+      it 'returns 200 status' do
+        expect(response).to be_successful
+      end
+
+      it 'return deleted question' do
+        expect(json['question']['body']).to eq questions.first.body
+      end
+
+      it 'deletes the question if logged user is author' do       
+        expect{ delete "/api/v1/questions/#{question.id}", params: { access_token: access_token.token }, headers: headers }.to change(Question, :count).by(-1)
+      end
+    end
+  end
+
+  describe 'POST /api/v1/questions' do
+    let(:user) { create :user }
+
+    it_behaves_like 'API Authorizable' do
+      let(:api_path) { "/api/v1/questions" }
+      let(:method) { :post }
+    end
+
+    context 'authorized' do
+      let(:access_token) { create :access_token, resource_owner_id: user.id }
+
+      before { post "/api/v1/questions", params: { access_token: access_token.token, question: attributes_for(:question)  }, headers: headers }
+
+      it 'returns 200 status' do
+        expect(response).to be_successful
+      end
+
+      it 'added question in db' do
+        expect { post "/api/v1/questions", params: { access_token: access_token.token, question: attributes_for(:question) } }.to change(Question, :count).by(1)
+      end
+    end
+  end
+
+  describe 'PATCH /api/v1/questions/:id' do    
+    let(:user) { create :user }
+    let!(:question) { create :question, author: user }
+
+    it_behaves_like 'API Authorizable' do
+      let(:api_path) { "/api/v1/questions/#{question.id}" }
+      let(:method) { :patch }
+    end
+
+    context 'authorized' do
+      let(:access_token) { create :access_token }
+
+      before { patch "/api/v1/questions/#{question.id}", params: { access_token: access_token.token, 
+                                                                   question: { title: 'New Title', body: 'New Body' } }, headers: headers }
+
+      it 'returns 200 status' do
+        expect(response).to be_successful
+      end
+
+      it 'the question change body and title ' do
+        question.reload
+        expect(question.body).to eq 'New Body'
+        expect(question.title).to eq 'New Title'
+      end
+    end
+  end
+
 end

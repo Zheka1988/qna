@@ -11,11 +11,12 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
-      format.json { render nothing: true, status: :forbidden }
+      format.json { head :forbidden }
       format.js   { head :forbidden, alert: exception.message }
       format.html { redirect_to root_url, alert: exception.message }
     end
   end
+
   check_authorization unless: :devise_controller?
  
   private
