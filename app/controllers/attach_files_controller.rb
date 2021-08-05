@@ -1,7 +1,10 @@
 class AttachFilesController < ApplicationController
 
+  # authorize_resource class: false
+  
   def destroy
     @file = ActiveStorage::Attachment.find(params[:id])
+    authorize! :destroy, @file
     if current_user.author_of?(@file.record)
       @file.purge
       redirect_to render_page(@file)
@@ -9,6 +12,7 @@ class AttachFilesController < ApplicationController
       head :forbidden
     end
   end
+  private
 
   def render_page(file)
     if file.record_type == "Question"

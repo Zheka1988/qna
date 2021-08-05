@@ -1,5 +1,6 @@
 class LinksController < ApplicationController
   before_action :load_link, only: [:destroy]
+  authorize_resource
 
   def destroy
     if current_user.author_of?(@model)

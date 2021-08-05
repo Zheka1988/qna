@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AttachFilesController, type: :controller do
   let!(:user) { create(:user) }
-  let(:question) { create :question, author: user }
+  let!(:question) { create :question, author: user }
 
   before { sign_in(user) }
 

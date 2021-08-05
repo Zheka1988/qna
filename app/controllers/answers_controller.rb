@@ -62,10 +62,11 @@ class AnswersController < ApplicationController
       link[:url] = l.url
       links[index] = link
     end
+    renderer = ApplicationController.renderer_with_signed_in_user(current_user)
 
     ActionCable.server.broadcast(
       "answers_#{@question.id}",
-      ApplicationController.render(
+      renderer.render(
         json: { id: @answer.id,
                 body: @answer.body,
                 voitings: @answer.voitings,

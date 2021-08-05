@@ -77,10 +77,11 @@ class QuestionsController < ApplicationController
       reward[:name] = @question.reward.name
       reward[:url_file] = rails_blob_path(@question.reward.file, only_path: true)
     end
+    renderer = ApplicationController.renderer_with_signed_in_user(current_user)
 
     ActionCable.server.broadcast(
       'questions',
-      ApplicationController.render(
+      renderer.render(
         json: { id: @question.id,
                 title: @question.title,
                 body: @question.body, 
