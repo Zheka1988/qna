@@ -44,7 +44,7 @@ describe 'Answers API', type: :request do
     let!(:answer) { create :answer, question: question, author: user }
     let!(:link) { answer.links.create(url: "http://example.com", name: "example") }
     let!(:comment) { answer.comments.create(body: 'first_comment', author: user) }
-    let!(:file) { answer.files.first }
+    let(:file) { answer.files.first }
 
     before do
       answer.files.attach(io: File.open("#{Rails.root}/spec/spec_helper.rb"),
@@ -79,7 +79,7 @@ describe 'Answers API', type: :request do
       it 'return only link for attached files' do
         name = answer.files.first.filename
 
-        expect(json['answer']['files']["#{name}"]).to eq Rails.application.routes.url_helpers.rails_blob_url(file, only_path: true)
+        expect(json['answer']['files']["#{name}"]).to eq rails_blob_path(file)
       end
 
     end
