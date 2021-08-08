@@ -49,5 +49,7 @@ class Ability
     can [:me, :index], User, id: user.id
 
     can [:destroy], Api::V1::QuestionsController, id: user.id
+
+    can [:unsubscribe, :subscribe], Question
   end
 end

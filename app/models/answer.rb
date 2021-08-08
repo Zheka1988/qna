@@ -12,7 +12,7 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
-  after_create :send_answer_to_author_qeustion
+  after_create :send_answer_to_author_question_and_subscribers
 
   def choose_best_answer
     transaction do
@@ -23,7 +23,8 @@ class Answer < ApplicationRecord
   end
 
   private 
-  def send_answer_to_author_qeustion
+  def send_answer_to_author_question_and_subscribers
     SendAnswerJob.perform_later(self)
   end
+
 end

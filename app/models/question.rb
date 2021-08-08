@@ -6,6 +6,7 @@ class Question < ApplicationRecord
   has_many :links, dependent: :destroy, as: :linkable
   has_one :reward, dependent: :destroy
   has_many :comments, as: :commentable,  dependent: :destroy
+  has_many :subscription
 
   has_many_attached :files
 
