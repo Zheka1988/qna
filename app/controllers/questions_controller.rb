@@ -16,6 +16,7 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answer.links.new
+    @subscription = Subscription.find_by(user_id: current_user.id, question_id: @question.id)
   end
 
   def new
@@ -44,15 +45,6 @@ class QuestionsController < ApplicationController
   def destroy
     @question.destroy
     redirect_to questions_path
-  end
-
-  def subscribe
-    Subscription.create!(user_id: current_user.id, question_id: @question.id)
-  end
-
-  def unsubscribe
-    @subscription = Subscription.find_by(user_id: current_user.id, question_id: @question.id)
-    @subscription.destroy
   end
 
   private

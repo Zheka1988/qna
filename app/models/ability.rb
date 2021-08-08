@@ -50,6 +50,10 @@ class Ability
 
     can [:destroy], Api::V1::QuestionsController, id: user.id
 
-    can [:unsubscribe, :subscribe], Question
+    can [:subscribe], Question
+
+    can [:insubscribe], Question do |question|
+      user.subscribed?(question)
+    end
   end
 end

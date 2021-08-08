@@ -26,9 +26,11 @@ Rails.application.routes.draw do
       resources :comments, only: [:create]
     end
     
-    member { get :subscribe }
-    member { get :unsubscribe }
+    # member { get :subscribe }
+    # member { get :unsubscribe }
   end
+
+  resources :subscriptions, only: [:create, :destroy]
 
   resources :attach_files, only: [:destroy]
   resources :links, only: [:destroy]

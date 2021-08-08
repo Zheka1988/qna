@@ -6,9 +6,9 @@ class DailyDigestMailer < ApplicationMailer
   #   en.daily_digest_mailer.digest.subject
   #
   def digest(user)
-    @questions = Question.find_each do |q|
-      q.created_at.strftime("%Y-%m-%d") == Date.today.strftime("%Y-%m-%d") ? q : next
-    end
+    date = Date.today
+    @questions = Question.all.where('created_at >= ? and created_at <=?', date.midnight, date.end_of_day)
+
     mail to: user.email
   end
 end
