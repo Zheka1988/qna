@@ -3,4 +3,8 @@ class Subscription < ApplicationRecord
   belongs_to :question
   
   validates_uniqueness_of :user_id, scope: :question_id
+
+  def subscriber?(user)
+    self.user_id == user.id
+  end
 end

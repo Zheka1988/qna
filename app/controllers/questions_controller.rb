@@ -16,7 +16,7 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answer.links.new
-    @subscription = Subscription.find_by(user_id: current_user.id, question_id: @question.id)
+    @subscription = Subscription.find_by(user_id: current_user.id, question_id: @question.id) if current_user
   end
 
   def new
