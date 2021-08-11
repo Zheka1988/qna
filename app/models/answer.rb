@@ -12,6 +12,8 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
+  after_create :send_answer_to_author_question_and_subscribers
+
   def choose_best_answer
     transaction do
       question.answers.where(best: true).update(best: false)
@@ -19,4 +21,10 @@ class Answer < ApplicationRecord
       question.reward.update(user_id: self.author.id )
     end
   end
+
+  private 
+  def send_answer_to_author_question_and_subscribers
+    SendAnswerJob.perform_later(self)
+  end
+
 end

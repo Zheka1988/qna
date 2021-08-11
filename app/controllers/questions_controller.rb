@@ -2,7 +2,7 @@ class QuestionsController < ApplicationController
   include Voitinged
   
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: %i[show edit update destroy]
+  before_action :load_question, only: %i[show edit update destroy subscribe unsubscribe]
   after_action :publish_question, only: [:create]
 
   before_action :gon_question, only: [:show]
@@ -16,6 +16,7 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answer.links.new
+    @subscription = Subscription.find_by(user_id: current_user.id, question_id: @question.id) if current_user
   end
 
   def new
@@ -30,6 +31,7 @@ class QuestionsController < ApplicationController
   def create
     @question = current_user.authored_questions.build(question_params)
     if @question.save
+      Subscription.create!(user_id: current_user.id, question_id: @question.id)
       redirect_to @question, notice: 'Your question successfully created.'
     else
       render :new

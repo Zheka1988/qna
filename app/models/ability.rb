@@ -49,5 +49,11 @@ class Ability
     can [:me, :index], User, id: user.id
 
     can [:destroy], Api::V1::QuestionsController, id: user.id
+
+    can [:create], Subscription
+
+    can [:destroy], Subscription do |subscription|
+      subscription.subscriber?(user)
+    end
   end
 end

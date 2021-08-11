@@ -34,4 +34,14 @@ RSpec.describe Question, type: :model do
       expect(question.sum_raiting).to eq 1
     end
   end
+
+  describe 'reputation' do
+    let(:user) { create :user }
+    let(:question) { build(:question, author: user) }
+
+    it 'calls ReputationJob' do
+      expect(ReputationJob).to receive(:perform_later).with(question)
+      question.save!
+    end
+  end
 end

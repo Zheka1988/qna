@@ -2,6 +2,16 @@ div class="question-show w-50 m-2" id="question-#{@question.id}"
   h1= @question.title
   p class="body-question m-2"
     = @question.body
+  p class="subscribes"
+    -if current_user&.subscribed?(@question)
+      = link_to 'Unsubscribe', subscription_path(@subscription),
+                          method: :delete,
+                          remote: true
+    -elsif current_user
+      = link_to 'Subscribe', subscriptions_path(question_id: @question.id), 
+                          method: :post,
+                          remote: true
+    
   div class="border m-1"
     = render 'shared/attach_file', resource: @question
 

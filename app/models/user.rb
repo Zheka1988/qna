@@ -3,6 +3,7 @@ class User < ApplicationRecord
   has_many :authored_questions, class_name: 'Question', foreign_key: :author_id
   has_many :voitings
   has_many :comments
+  has_many :subscription, dependent: :destroy
 
   has_many :authorizations, dependent: :destroy
   
@@ -24,5 +25,9 @@ class User < ApplicationRecord
 
   def create_authorization(auth)
     self.authorizations.create(provider: auth.provider, uid: auth.uid)
+  end
+
+  def subscribed?(question)
+    Subscription.find_by(user_id: self.id, question_id: question.id) ? true : false
   end
 end
