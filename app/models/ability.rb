@@ -55,5 +55,7 @@ class Ability
     can [:destroy], Subscription do |subscription|
       subscription.subscriber?(user)
     end
+
+    can [:search], [Answer, Question, Comment, User], id: user.id
   end
 end
