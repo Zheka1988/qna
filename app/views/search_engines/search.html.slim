@@ -1,0 +1,15 @@
+- @search_rezult.each do |rezult|
+  - case @classes[rezult.class.to_s]
+    - when 1
+      h2= "Questions" 
+      h2= rezult.title
+      p= rezult.body
+    - when 2 
+      h2= "Answers"
+      p= rezult.body
+    - when 3
+      h2= "Comments" 
+      p= rezult.body
+    - when 4
+      h2 = "Users" 
+      p= rezult.email

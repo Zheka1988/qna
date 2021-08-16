@@ -44,6 +44,9 @@ gem "aws-sdk-s3", require: false
 gem "cocoon"
 gem "gon"
 
+gem 'mysql2', '~> 0.4'
+gem 'thinking-sphinx', '~> 5.2'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -51,6 +54,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'dotenv-rails'
   gem 'pry', '~> 0.13.1'
+  # gem 'database_cleaner', '1.7.0'
 end
 
 group :development do
@@ -73,6 +77,9 @@ group :test do
   gem 'shoulda-matchers', '~> 4.0'
   gem 'rails-controller-testing'
   gem 'launchy'
+  
+  # gem  'database_cleaner-active_record' 
+  # gem  'database_cleaner-redis' 
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
