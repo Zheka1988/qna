@@ -15,7 +15,7 @@ feature 'User can delete any attach file for questions', %q{
     within '.questions' do
       click_on 'Edit'
       attach_file 'Files', ["#{Rails.root}/spec/spec_helper.rb"]
-      click_on 'Save'
+      click_on 'Update'
     end
 
     click_on 'Delete file'
@@ -32,7 +32,7 @@ feature 'User can delete any attach file for questions', %q{
     within '.questions' do
       click_on 'Edit'
       attach_file 'Files', ["#{Rails.root}/spec/spec_helper.rb"]
-      click_on 'Save'
+      click_on 'Update'
     end
 
     click_on 'Logout'

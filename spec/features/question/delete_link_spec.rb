@@ -17,14 +17,13 @@ feature 'User can delete any link for questions', %q{
     fill_in 'Body', with: 'text text text'
     fill_in 'Link name', with: 'My gist'
     fill_in 'Url', with: google
-    click_on 'Ask'
+    click_on 'Ask question'
   end
 
   scenario 'delete link if user author the question', js: true do
-    click_on 'Delete Link'
+    find("#delete-link-#{Link.first.id}").click
 
     page.driver.browser.switch_to.alert.accept
-
     expect(page).to_not have_link 'My link', href: google
   end
 

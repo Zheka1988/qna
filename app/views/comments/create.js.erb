@@ -1,4 +1,8 @@
-$('.answer-errors').html('<%= render 'shared/errors', resource: @comment %>');
+<% if @comment.commentable.class.name == "Question" %>
+  $('.question-comment-errors').html('<%= render 'shared/errors', resource: @comment %>');
+<% elsif @comment.commentable.class.name == "Answer" %>
+  $("#answer-<%= @comment.commentable.id %> .comment-answer-new .answer-comment-errors").html('<%= render 'shared/errors', resource: @comment %>');
+<% end %>
 
 <% if @comment.persisted? %>
   <% if @comment.commentable.class.name == "Question" %>

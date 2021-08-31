@@ -8,7 +8,6 @@ $(document).on('turbolinks:load', function(){
   
   $('.answers').on('ajax:success', function(e){
     var voiting = e.detail[0];
-    console.log(voiting.voitingable_id)
     $('.answers #answer-' + voiting.voitingable_id + ' .raiting-' + voiting.voitingable_id).html(voiting.sum_raiting);
   })
     .on('ajax:error', function (e) {

@@ -26,6 +26,10 @@ class QuestionsController < ApplicationController
   end
 
   def edit
+    # unless @question.reward
+    #   @question.build_reward
+    # end
+    # render partial: "edit"
   end
 
   def create

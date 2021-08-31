@@ -17,8 +17,8 @@ class Answer < ApplicationRecord
   def choose_best_answer
     transaction do
       question.answers.where(best: true).update(best: false)
-      update!(best: true)
-      question.reward.update(user_id: self.author.id )
+      self.update!(best: true)
+      question.reward.update(user_id: self.author.id ) if question.reward
     end
   end
 

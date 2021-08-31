@@ -14,7 +14,7 @@ feature 'User can delete link for answer', %q{
     sign_in user
     visit question_path(question)
     
-    within ".new-answer" do
+    within ".div-new-answer" do
       fill_in "Body", with: 'New answer'
       fill_in 'Link name', with: 'My gist'
       fill_in 'Url', with: google
@@ -24,7 +24,7 @@ feature 'User can delete link for answer', %q{
   
   scenario 'delete link if user author the answer', js: true do
     within '.answers' do
-      click_on 'Delete Link'
+      find("#delete-link-#{Link.first.id}").click
     end
 
     page.driver.browser.switch_to.alert.accept

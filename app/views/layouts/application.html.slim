@@ -15,10 +15,10 @@ html
 
   body class="container"
     = render 'shared/header'
-    = render 'shared/search'
     div class="notice"
       = notice
-    div class="alert"
+    div class="msg-alert"
       = alert
+    = render 'shared/search'
     div class="d-flex justify-content-center"
       = yield

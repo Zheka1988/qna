@@ -1,5 +1,8 @@
-.search 
-  = form_tag(search_path, method: :get) do 
-    = text_field_tag :search, params[:search] 
-    = select_tag "find", options_for_select([ "Questions", "Answers", "Users", "Comments", "All" ], "All")
-    = submit_tag "Search"
+= form_tag(search_path, method: :get, class: 'form-group') do
+  div class="search d-flex flex-row justify-content-end p-2"
+      div class="mx-1"
+        = text_field_tag :search, params[:search], class: "form-control form-control-sm" 
+      div
+        = select_tag "find", options_for_select([ "Questions", "Answers", "Users", "Comments", "All" ], "All"), class: "form-control form-control-sm"
+      div class="mx-1"
+        = submit_tag "Search", class: 'btn btn-sm btn-primary'

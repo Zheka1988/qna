@@ -5,10 +5,12 @@ class SubscriptionsController < ApplicationController
   authorize_resource
 
   def create
-    Subscription.create!(user_id: current_user.id, question_id: @question.id)
+    @subscription = Subscription.new(user_id: current_user.id, question_id: @question.id)
+    @subscription.save
   end
 
   def destroy
+    @question = @subscription.question
     @subscription.destroy
   end
 

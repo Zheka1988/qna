@@ -25,6 +25,7 @@ class AnswersController < ApplicationController
 
   def best
     @answer.choose_best_answer
+    flash[:alert] = "The best answer was chosen"
   end
 
   private

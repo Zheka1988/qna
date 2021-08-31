@@ -17,10 +17,11 @@ class CommentsController < ApplicationController
   def publish_comment
     return if @comment.errors.any?
     
-    
+    renderer = ApplicationController.renderer_with_signed_in_user(current_user)
+
     ActionCable.server.broadcast(
       "comments_#{@question.id}",
-      ApplicationController.render(
+      renderer.render(
         json: { id: @comment.id,
                 body: @comment.body,
                 # question_user_id: @comment.question.author.id

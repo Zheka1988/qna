@@ -3,7 +3,12 @@ $(document).on('turbolinks:load', function(){
     e.preventDefault();
     $(this).hide();
     var questionId = $(this).data('questionId');
-    $('form#edit-question-'+questionId).removeClass('hidden');
+    
+    // $.get('/questions/' + questionId +'/edit', function(data) {
+    //   $('#div-edit-question-'+ questionId).html(data)
+    //   $('form#edit-question-'+ questionId).removeClass('hidden');
+    // })
+    $('form#edit-question-'+ questionId).removeClass('hidden');
   });
 
   $('.questions').on('ajax:success', function(e){

@@ -24,6 +24,7 @@ module Voitinged
       render_page(@voitingable)
     end
   end
+
   private
   def render_page(object)
     if model_klass == Question

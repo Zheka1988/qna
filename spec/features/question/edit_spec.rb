@@ -24,14 +24,13 @@ feature 'User can edit his question', %q{
       within '.questions' do
         click_on 'Edit'
         fill_in 'Body question', with: 'Edited question'
-        
         attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
 
         click_on 'add link'
         fill_in 'Link name', with: 'My link'
         fill_in 'Url', with: google
 
-        click_on 'Save'
+        click_on 'Update'
 
         expect(page).to_not have_content question.body
         expect(page).to have_content 'Edited question'
@@ -58,7 +57,7 @@ feature 'User can edit his question', %q{
         click_on 'Edit'
         fill_in 'Body question', with: ""
 
-        click_on 'Save'
+        click_on 'Update'
       end
 
       expect(page).to have_content "Body can't be blank"

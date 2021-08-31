@@ -4,11 +4,12 @@
   = f.label :files
   = f.file_field :files, multiple: true, direct_upload: true, class: "form-control"
 
-  div id="links" class="links-answer-new border border-dark p-1 rounded m-1"
-    p Links:
+  div id="links" class="links-answer-new"
+    h6 class="mt-2"
+      = "Links:"
     = f.fields_for :links do |link|
       = render 'link_fields', f: link
     .links
       = link_to_add_association 'add link', f, :links
     
-  = f.submit 'Reply', class: "btn btn-primary"
+  = f.submit 'Reply', class: "btn btn-primary w-100"

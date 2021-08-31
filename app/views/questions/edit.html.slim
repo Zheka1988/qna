@@ -1,0 +1,28 @@
+/ = form_with model: @question, class: 'form-group hidden', local: false, html: { id: "edit-question-#{@question.id}" } do |f|
+/   div class="d-flex flex-column w-100"
+/     div class="p-2"
+/       = f.label :title, 'Title question'
+/       = f.text_field :title, class: "form-control m-1"
+/       = f.label :body, 'Body question'
+/       = f.text_area :body, class: "form-control m-1"
+/       = f.label :files
+/       = f.file_field :files, multiple: true, direct_upload: true, class: "form-control m-1"
+    
+/     div class="p-2"
+/       h6= "Reward:"
+/       = f.fields_for :reward do |r|
+/         = r.label :name, 'Name reward'
+/         = r.text_field :name, class: "form-control"
+/         = r.label :file
+/         = r.file_field :file, direct_upload: true, class: "form-control"
+
+/     div class="p-2"
+/       h6= "Links:"
+/       #links
+/         = f.fields_for :links do |link|
+/           = render 'link_fields', f: link
+/         .links
+/           = link_to_add_association 'add link', f, :links
+
+/     div class="p-2"
+/       = f.submit 'Update', class: "btn btn-primary w-100" 
