@@ -50,5 +50,6 @@ Rails.application.routes.draw do
   end
 
   get '/search', to: 'search_engines#search'
-
+  
+  mount ActionCable.server => "/cable"
 end
