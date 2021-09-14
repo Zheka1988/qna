@@ -1,9 +1,10 @@
-div class="px-4 text-center"
-  = form_with model: [resource, Comment.new], local: false, class: 'new-comment form-group' do |f|
-    = f.hidden_field :commentable, value: resource.class.name
-    = f.label :body
-    = f.text_area :body, class: "form-control"
-    -if resource.class.to_s == "Question" 
-      = f.submit "Add Comment to Question", class: 'btn btn-primary btn-sm w-75 my-2'
-    -else
-      = f.submit "Add Comment to Answer", class: 'btn btn-primary btn-sm w-75 my-2' 
+- cache resource do
+  div class="px-4 text-center"
+    = form_with model: [resource, Comment.new], local: false, class: 'new-comment form-group' do |f|
+      = f.hidden_field :commentable, value: resource.class.name
+      = f.label :body
+      = f.text_area :body, class: "form-control"
+      -if resource.class.to_s == "Question" 
+        = f.submit "Add Comment to Question", class: 'btn btn-primary btn-sm w-75 my-2'
+      -else
+        = f.submit "Add Comment to Answer", class: 'btn btn-primary btn-sm w-75 my-2' 

@@ -1,11 +1,12 @@
-.questions
-  -if can?(:create, Question)
-    div class="new-question-link"
-      = link_to 'Ask question', new_question_path
+- cache collection_cache_key_for :question do
+  .questions
+    -if can?(:create, Question)
+      div class="new-question-link"
+        = link_to 'Ask', new_question_path
 
-    div class="question-errors"
-      = render 'shared/errors', resource: @question
+      div class="question-errors"
+        = render 'shared/errors', resource: @question
 
-  - if @questions
-    = render @questions
+    - if @questions
+      = render @questions
          
